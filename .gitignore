@@ -1,5 +1,14 @@
+# realesrgan 모델 제외
 Real-ESRGAN/
+weights/
 
+# 학습 파일 제외
+train_img/
+train_img_low/
+
+# 해상도 개선 대상 이미지 제외
+high_resolution_img/
+low_resolution_img/
 
 # mmrotate 폴더 전체 제외
 mmrotate/
