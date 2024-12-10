@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incheon District Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">행정동 선택</h5>
+                        <select id="district-select" class="form-control mb-4">
+                            <option value="">행정동 선택</option>
+                        </select>
+                        <div id="images" class="row">
+                            <!-- 이미지가 여기에 표시됩니다. -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 지도 생성
+            const map = L.map('map').setView([37.4563, 126.7052], 11);
+
+            // OpenStreetMap 타일 레이어 추가
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            let geoJsonLayer;
+            let currentMarker;
+            let currentBoundingBoxMarkers = [];
+
+            // 자동차 아이콘 정의
+            const carIcon = L.icon({
+            iconUrl: '/static/icons/caricon.png', // 자동차 아이콘 이미지 경로
+            iconSize: [40, 40], // 아이콘 크기 (width, height)
+            iconAnchor: [20, 40], // 아이콘 위치(anchor) 조정
+            popupAnchor: [0, -40], // 팝업 위치 조정
+            });
+
+            // GeoJSON 데이터 추가
+            fetch('/geojson')
+                .then(response => response.json())
+                .then(data => {
+                    geoJsonLayer = L.geoJson(data, {
+                        style: function (feature) {
+                            return {
+                                color:'#4682b4',
+                                weight: 2,
+                                opacity:0.8,
+                                fillColor: "#add8e6",
+                                fillOpacity: 0.65
+                            };
+                        }
+                    }).addTo(map);
+                });
+
+            // 행정동 선택지 설정
+            fetch('/districts')
+                .then(response => response.json())
+                .then(districts => {
+                    const select = document.getElementById('district-select');
+                    districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = JSON.stringify(district.center);
+                        option.textContent = district.name;
+                        select.appendChild(option);
+                    });
+                });
+
+            // 행정동 선택 시 지도 확대 및 마커 추가
+            document.getElementById('district-select').addEventListener('change', function () {
+                const center = JSON.parse(this.value);
+                const districtName = this.options[this.selectedIndex].text;
+
+                if (center && center.length === 2) {
+                    // 지도 확대
+                    map.setView(center, 15);
+
+                    // 기존 마커 제거
+                    if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                    }
+
+                    // 기존 Bounding Box 마커들 제거
+                    currentBoundingBoxMarkers.forEach(marker => {
+                        map.removeLayer(marker);
+                    });
+                    currentBoundingBoxMarkers = [];
+
+                    // 새 마커 추가
+                    currentMarker = L.marker(center)
+                        .addTo(map)
+                        .bindPopup(`<b>${districtName}</b>`)
+                        .openPopup();
+
+                    // 선택된 행정동에 대해 Bounding Box 데이터 가져오기
+                    fetch('/bounding_boxes')
+                        .then(response => response.json())
+                        .then(boundingBoxes => {
+                            boundingBoxes.forEach(box => {
+                                const imageName = box['Image Name'];
+                                const coordsMatch = imageName.match(/\(([^,]+),\s*([^)]+)\)/);
+                                if (!coordsMatch) {
+                                    console.error("이미지 이름에서 좌표를 추출할 수 없습니다:", imageName);
+                                    return;
+                                }
+
+                                let latitude = parseFloat(coordsMatch[1].replace("°", "").trim());
+                                let longitude = parseFloat(coordsMatch[2].replace("°", "").trim());
+                                const offsetX = parseFloat(box['X Coordinate']);
+                                const offsetY = parseFloat(box['Y Coordinate']);
+
+                                if (isNaN(offsetX) || isNaN(offsetY)) {
+                                    console.error("잘못된 X/Y 좌표 값:", offsetX, offsetY);
+                                    return;
+                                }
+
+                                // 간단한 위치 변환 계산 (픽셀을 약간의 위도/경도 이동으로 간주)
+                                const latOffset = offsetY * 0.00001;
+                                const lngOffset = offsetX * 0.00001;
+
+                                const markerLat = latitude + latOffset;
+                                const markerLng = longitude + lngOffset;
+
+                                // 마커 추가
+                                const marker = L.marker([markerLat, markerLng], { icon: carIcon })
+                                    .addTo(map)
+                                    .bindPopup(
+                                        `<b>방치 의심 차량 위치</b><br>Latitude: ${markerLat.toFixed(6)}, Longitude: ${markerLng.toFixed(6)}<br>
+                                        <button onclick="showImages(${latitude}, ${longitude}, ${offsetX}, ${offsetY})"
+                                        class="btn btn-primary btn-sm mt-2">사진 보기</button>`
+                                    );
+
+                                currentBoundingBoxMarkers.push(marker);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("CSV 데이터 로드 중 오류 발생:", error);
+                        });
+                }
+            });
+
+            // 선택한 위치의 이미지를 표시하는 함수
+            window.showImages = function (latitude, longitude, offsetX, offsetY) {
+                const imagesContainer = document.getElementById('images');
+                imagesContainer.innerHTML = ""; // 기존 이미지 제거
+
+                const latNum = parseFloat(latitude);
+                const lngNum = parseFloat(longitude);
+
+                const baseImagePath = 'static/car_images/';
+                const formattedLatitude = latNum.toFixed(6).replace(".", "");
+                const formattedLongitude = lngNum.toFixed(6).replace(".", "");
+                const imagePrefix = `object_${formattedLatitude}_${formattedLongitude}_x${offsetX}_y${offsetY}_`;
+
+                const mayImagePath = `${baseImagePath}${imagePrefix}may.png`;
+                const juneImagePath = `${baseImagePath}${imagePrefix}june.png`;
+
+                const imgMayHTML = `<img src="${mayImagePath}" alt="Image for May" class="col-md-12 mb-3">`;
+                imagesContainer.innerHTML += imgMayHTML;
+
+                const imgJuneHTML = `<img src="${juneImagePath}" alt="Image for June" class="col-md-12 mb-3">`;
+                imagesContainer.innerHTML += imgJuneHTML;
+            };
+        });
+    </script>
+</body>
+
+</html>
