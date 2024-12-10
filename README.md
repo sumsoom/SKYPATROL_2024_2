@@ -79,10 +79,7 @@
 ```plaintext
     /content/train
 ```
-folder_may = "/content/drive/MyDrive/detectron2/5월"
-folder_june = "/content/drive/MyDrive/detectron2/6월"
-csv_filename = "/content/drive/MyDrive/dataset/matched_objects.csv"
-output_folder = "/content/drive/MyDrive/dataset/matched_objects_images"
+
 ### 4️⃣ **중심 좌표 계산 및 변화 탐지**  
 - 탐지된 객체들의 중심 좌표를 계산하여 정확한 위치 정보를 추출합니다.  
 - 변화 탐지 알고리즘을 적용해 시간에 따른 객체 변화를 분석하고, 무단 방치 차량 여부를 판별합니다.
@@ -90,7 +87,7 @@ output_folder = "/content/drive/MyDrive/dataset/matched_objects_images"
   ```plaintext
 비교할 n-1 월 = "/content/drive/MyDrive/detectron2/n-1월" 에 사진 저장
 비교할 n 월 = "/content/drive/MyDrive/detectron2/n월" 에 사진 저장
-(각 폴더 내 사진 이름은 똑같아야 함. 
+(각 폴더 내 사진 이름은 똑같아야 함.) 
 ex) 
 /content/drive/MyDrive/detectron2/5월
 ├── (37.483601°, 126.645470°).png
@@ -99,7 +96,7 @@ ex)
 /content/drive/MyDrive/detectron2/6월
 ├── (37.483601°, 126.645470°).png
 ├── (37.483601°, 126.638490°).png
-
+```
 ✨ **이 4단계 프로세스**를 통해 위성 데이터를 효율적으로 활용하고, 무단 방치 차량을 간단히 탐지할 수 있습니다! 🚗🌍  
 
 ---
