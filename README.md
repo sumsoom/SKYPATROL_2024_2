@@ -58,7 +58,8 @@
 
 ### 3️⃣ **차량 객체 세그멘테이션**  
 - **알고리즘**: Mask R-CNN을 활용하여 차량 객체를 탐지하고 정확히 세그멘테이션합니다.  
-- **결과물**: 탐지된 차량 객체가 이미지에서 시각적으로 구분됩니다.  
+- **결과물**: 탐지된 차량 객체가 이미지에서 시각적으로 구분됩니다.
+- **학습** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lhg010524/Detection_Abandoned-vehicle/blob/main/mask_rcnn_train.ipynb)
 
 ### 4️⃣ **중심 좌표 계산 및 변화 탐지**  
 - 탐지된 객체들의 중심 좌표를 계산하여 정확한 위치 정보를 추출합니다.  
