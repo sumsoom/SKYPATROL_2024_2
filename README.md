@@ -83,7 +83,7 @@
 ### 4️⃣ **중심 좌표 계산 및 변화 탐지**  
 - 탐지된 객체들의 중심 좌표를 계산하여 정확한 위치 정보를 추출합니다.  
 - 변화 탐지 알고리즘을 적용해 시간에 따른 객체 변화를 분석하고, 무단 방치 차량 여부를 판별합니다.
-- **테스트** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lhg010524/Detection_Abandoned-vehicle/blob/main/방치차량검출_테스트.ipynb)
+- **테스트** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lhg010524/Detection_Abandoned-vehicle/blob/main/mask_rcnn_test.ipynb)
 
 ✨ **이 5단계 프로세스**를 통해 위성 데이터를 효율적으로 활용하고, 무단 방치 차량을 간단히 탐지할 수 있습니다! 🚗🌍  
 
