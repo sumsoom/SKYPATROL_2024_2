@@ -34,4 +34,14 @@
 
 ---
 
-✨ **One-Click Detection Service**를 통해 누구나 위성 데이터를 활용할 수 있는 세상을 만들어갑니다! 🚀  
+## ⚙️ **설치 방법**  
+**Colab** 환경에서 프로젝트를 실행하는 방법입니다.
+
+1. **GitHub 저장소 클론**  
+   아래 명령어를 사용해 저장소를 복제합니다:
+   ```bash
+   !git clone https://github.com/lhg010524/Detection_Abandoned-vehicle
+
+---
+
+✨ **One-Click Detection Service**를 통해 누구나 위성 데이터를 활용할 수 있는 세상을 만들어갑니다! 🚀 
