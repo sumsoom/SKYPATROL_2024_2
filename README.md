@@ -60,7 +60,7 @@
 - **알고리즘**: Mask R-CNN을 활용하여 차량 객체를 탐지하고 정확히 세그멘테이션합니다.  
 - **결과물**: 탐지된 차량 객체가 이미지에서 시각적으로 구분됩니다.
 - **학습** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lhg010524/Detection_Abandoned-vehicle/blob/main/mask_rcnn_train.ipynb)
-- 📂 **Data Download** [Data Download Link](#) <!-- 여기에 실제 데이터 다운로드 링크를 삽입하세요 -->
+- 📂 **Data Download** [Data Download Link](https://drive.google.com/drive/folders/1qkFEiILEDe9Tmyfc9jjP023kqG1XwLnd?usp=drive_link) <!-- 여기에 실제 데이터 다운로드 링크를 삽입하세요 -->
 
 1. Annotation Files
 ```plaintext
