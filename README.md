@@ -85,17 +85,17 @@
 - 변화 탐지 알고리즘을 적용해 시간에 따른 객체 변화를 분석하고, 무단 방치 차량 여부를 판별합니다.
 - **테스트** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lhg010524/Detection_Abandoned-vehicle/blob/main/mask_rcnn_test.ipynb)
   ```plaintext
-비교할 n-1 월 = "/content/drive/MyDrive/detectron2/n-1월" 에 사진 저장
-비교할 n 월 = "/content/drive/MyDrive/detectron2/n월" 에 사진 저장
-(각 폴더 내 사진 이름은 똑같아야 함.) 
-ex) 
-/content/drive/MyDrive/detectron2/5월
-├── (37.483601°, 126.645470°).png
-├── (37.483601°, 126.638490°).png
-
-/content/drive/MyDrive/detectron2/6월
-├── (37.483601°, 126.645470°).png
-├── (37.483601°, 126.638490°).png
+      비교할 n-1 월 = "/content/drive/MyDrive/detectron2/n-1월" 에 사진 저장
+      비교할 n 월 = "/content/drive/MyDrive/detectron2/n월" 에 사진 저장
+      (각 폴더 내 사진 이름은 똑같아야 함.) 
+      ex) 
+      /content/drive/MyDrive/detectron2/5월
+      ├── (37.483601°, 126.645470°).png
+      ├── (37.483601°, 126.638490°).png
+      
+      /content/drive/MyDrive/detectron2/6월
+      ├── (37.483601°, 126.645470°).png
+      ├── (37.483601°, 126.638490°).png
 ```
 ✨ **이 4단계 프로세스**를 통해 위성 데이터를 효율적으로 활용하고, 무단 방치 차량을 간단히 탐지할 수 있습니다! 🚗🌍  
 
